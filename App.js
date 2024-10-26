@@ -1,20 +1,41 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import { StatusBar, Text, View } from "react-native";
+import { TasksScreen } from "./screens/TasksScreen"
 
-export default function App() {
+function MessageScreen() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View>
+      <Text>
+        Messages
+      </Text>
     </View>
-  );
+  )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+function LastActivitYScreen() {
+  return (
+    <View>
+      <Text>
+        LastActivit
+      </Text>
+    </View>
+  )
+}
+
+const Tab = createMaterialTopTabNavigator()
+
+export default function App() {
+
+  return(
+
+    <NavigationContainer>
+      <StatusBar style="auto"/>
+<Tab.Navigator initialRouteName="TASKS">
+  <Tab.Screen name="MESSAGE" component={ MessageScreen }/>
+  <Tab.Screen name="TASKS" component={ TasksScreen }/>
+  <Tab.Screen name="LAST ACTIVITY" component={ LastActivitYScreen }/>
+</Tab.Navigator>
+    </NavigationContainer>
+  )
+};
