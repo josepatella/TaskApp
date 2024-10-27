@@ -1,14 +1,42 @@
-import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { FlatList, Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 export function TasksScreen () {
 
-    const [tarefa, setTarefa] = useState('')
+    const [tasks, setTasks] = useState([{
+      nome: "Estudar",
+      descricao: "Estudar para DevInHouse",
+      status: true,
+      data: "16/09/2024"
+    },
+    {
+      nome: "Exercício",
+      descricao: "Fazer exercício físico",
+      status: false,
+      data: "17/09/2024"
+    },
+    {
+      nome: "Trabalho",
+      descricao: "Terminar o projeto Task App",
+      status: true,
+      data: "18/09/2024"
+    }])
   const [modalVisible, setModalVisible] = useState(false);
+  const [novaTask, setNovaTask] = useState('')
+
+  const renderTarefa = ({ item }) => (
+    <View>
+        <View
+            titulo={item.nome}
+            descricao={item.descricao}
+            data={item.data}
+            status={item.status}
+        />
+    </View>
+);
 
   useEffect(() => {
-  }, [tarefa])
+  }, [tasks])
 
     return (
         <>
@@ -23,8 +51,8 @@ export function TasksScreen () {
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>Nova tarefa</Text>
-            <TextInput style={styles.inputStyle} placeholder='Tarefa' value={tarefa} onChangeText={setTarefa} />
-            <Text style={styles.modalView} >{tarefa}</Text>
+            <TextInput style={styles.inputStyle} placeholder='Tarefa' value={novaTask} onChangeText={setNovaTask} />
+            <Text style={styles.modalView} >{novaTask}</Text>
             <View style={styles.inline} >
               <Pressable
                 style={[styles.button, styles.buttonClose]}
@@ -47,6 +75,12 @@ export function TasksScreen () {
         onPress={() => setModalVisible(true)}>
         <Text style={styles.textStyle}>Nova tarefa</Text>
       </Pressable>
+      <View>
+      <FlatList
+                renderItem={renderTarefa}
+                keyExtractor={(item, index) => index.toString()}
+            />
+      </View>
     </View>
         </>
     )
