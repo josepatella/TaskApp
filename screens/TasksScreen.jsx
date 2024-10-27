@@ -1,5 +1,41 @@
 import { useEffect, useState } from 'react';
-import { FlatList, Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { FlatList, Modal, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import ModalNovaTarefa from '../components/ModalNovaTarefa';
+import CardTarefa from '../components/CardTarefa';
+
+const obterDataFormatada = () => {
+  const hoje = new Date();
+  const diasSemana = [
+      "Domingo",
+      "Segunda-feira",
+      "Terça-feira",
+      "Quarta-feira",
+      "Quinta-feira",
+      "Sexta-feira",
+      "Sábado",
+  ];
+  const mesesAno = [
+      "Janeiro",
+      "Fevereiro",
+      "Março",
+      "Abril",
+      "Maio",
+      "Junho",
+      "Julho",
+      "Agosto",
+      "Setembro",
+      "Outubro",
+      "Novembro",
+      "Dezembro",
+  ];
+
+  const diaSemana = diasSemana[hoje.getDay()];
+  const diaMes = hoje.getDate();
+  const mes = mesesAno[hoje.getMonth()];
+
+  return `${diaSemana}, ${diaMes} de ${mes}`;
+
+};
 
 export function TasksScreen () {
 
@@ -22,18 +58,6 @@ export function TasksScreen () {
       data: "18/09/2024"
     }])
   const [modalVisible, setModalVisible] = useState(false);
-  const [novaTask, setNovaTask] = useState('')
-
-  const renderTarefa = ({ item }) => (
-    <View>
-        <View
-            titulo={item.nome}
-            descricao={item.descricao}
-            data={item.data}
-            status={item.status}
-        />
-    </View>
-);
 
   useEffect(() => {
   }, [tasks])
@@ -41,46 +65,37 @@ export function TasksScreen () {
     return (
         <>
         <View style={styles.container}>
-      <Modal
-        animationType="fade"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          setModalVisible(!modalVisible);
-        }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Nova tarefa</Text>
-            <TextInput style={styles.inputStyle} placeholder='Tarefa' value={novaTask} onChangeText={setNovaTask} />
-            <Text style={styles.modalView} >{novaTask}</Text>
-            <View style={styles.inline} >
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}>
-                <Text style={styles.textStyle}>Cancelar</Text>
-              </Pressable>
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}>
-                <Text style={styles.textStyle}>Salvar</Text>
-              </Pressable>
-            </View>
-
-          </View>
-        </View>
-      </Modal>
+        <Text style={styles.dataTexto}>{obterDataFormatada()}</Text>
 
       <Pressable
         style={[styles.button, styles.buttonOpen]}
         onPress={() => setModalVisible(true)}>
         <Text style={styles.textStyle}>Nova tarefa</Text>
       </Pressable>
-      <View>
+      <ModalNovaTarefa visivel={modalVisible} aoFechar={() => setModalVisible(false)}/>
       <FlatList
-                renderItem={renderTarefa}
+                data={tasks}
+                renderItem={
+                  ({item}) => {
+                    return(
+                      <View>
+        <CardTarefa
+            titulo={item.nome}
+            descricao={item.descricao}
+            data={item.data}
+            status={item.status}
+        />
+        {!item.status && (
+            <TouchableOpacity onPress={() => concluirTarefa(tarefas.indexOf(item))}>
+                <Text style={styles.botaoConcluir}>Marcar como Concluída</Text>
+            </TouchableOpacity>
+        )}
+    </View>
+                    )
+                  }
+                }
                 keyExtractor={(item, index) => index.toString()}
             />
-      </View>
     </View>
         </>
     )
@@ -142,6 +157,11 @@ const styles = StyleSheet.create({
     inline: {
       flexDirection: 'row',
       gap: 80
-    }
+    },
+    dataTexto: {
+      fontSize: 18,
+      fontWeight: "bold",
+      marginBottom: 10,
+  },
   });
   
