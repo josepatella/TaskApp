@@ -1,6 +1,6 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { NavigationContainer } from "@react-navigation/native";
-import { StatusBar, Text, View } from "react-native";
+import { StatusBar } from "react-native";
 import { TasksScreen } from "./screens/TasksScreen"
 import { MessageScreen } from "./screens/MessagesScreen";
 import { LastActivitYScreen } from "./screens/LastActivityScreen";

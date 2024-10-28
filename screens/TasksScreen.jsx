@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { FlatList, Modal, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import ModalNovaTarefa from '../components/ModalNovaTarefa';
 import CardTarefa from '../components/CardTarefa';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const obterDataFormatada = () => {
   const hoje = new Date();
@@ -59,6 +60,22 @@ export function TasksScreen() {
   }])
   const [modalVisible, setModalVisible] = useState(false)
   const [filtro, setFiltro] = useState("")
+
+  useEffect(()=>{
+    const carregarTarefas = async () => {
+      try {
+          const tarefasSalvas = await AsyncStorage.getItem("tasks");
+          if (tarefasSalvas !== null) {
+            setTasks(JSON.parse(tarefasSalvas));
+          } else {
+            setTasks(tasks);
+          }
+      } catch (error) {
+          console.log(error);
+      }
+  };
+  carregarTarefas();
+  }, [])
 
   const salvarTarefas = async (tasks) => {
     try {
