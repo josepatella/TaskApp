@@ -2,26 +2,8 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar, Text, View } from "react-native";
 import { TasksScreen } from "./screens/TasksScreen"
-
-function MessageScreen() {
-  return (
-    <View>
-      <Text>
-        Messages
-      </Text>
-    </View>
-  )
-}
-
-function LastActivitYScreen() {
-  return (
-    <View>
-      <Text>
-        LastActivit
-      </Text>
-    </View>
-  )
-}
+import { MessageScreen } from "./screens/MessagesScreen";
+import { LastActivitYScreen } from "./screens/LastActivityScreen";
 
 const Tab = createMaterialTopTabNavigator()
 
